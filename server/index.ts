@@ -10,23 +10,24 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
-  // Correct path to built frontend
+  // ✅ FIXED PATH
   const staticPath =
     process.env.NODE_ENV === "production"
-      ? path.resolve(__dirname, "public") // dist/public
-      : path.resolve(__dirname, "..", "dist", "public");
+      ? __dirname // dist/
+      : path.resolve(__dirname, "..", "dist");
 
+  // Serve frontend
   app.use(express.static(staticPath));
 
-  // Handle React routing
+  // SPA fallback
   app.get("*", (_req, res) => {
     res.sendFile(path.join(staticPath, "index.html"));
   });
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 10000;
 
   server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
+    console.log(`Server running on port ${port}`);
   });
 }
 
