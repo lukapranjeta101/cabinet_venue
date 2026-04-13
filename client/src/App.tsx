@@ -20,6 +20,18 @@ import ContactUs from "./pages/ContactUs";
 function ScrollToTop() {
   const [location] = useLocation();
 
+  const resetScrollPosition = () => {
+    const scrollingElement = document.scrollingElement ?? document.documentElement;
+    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+
+    document.documentElement.style.scrollBehavior = "auto";
+    window.scrollTo(0, 0);
+    scrollingElement.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    document.documentElement.style.scrollBehavior = previousScrollBehavior;
+  };
+
   useEffect(() => {
     if (!("scrollRestoration" in window.history)) {
       return;
@@ -34,7 +46,33 @@ function ScrollToTop() {
   }, []);
 
   useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
+    resetScrollPosition();
+
+    let secondFrame: number | null = null;
+
+    const firstFrame = window.requestAnimationFrame(() => {
+      resetScrollPosition();
+
+      secondFrame = window.requestAnimationFrame(() => {
+        resetScrollPosition();
+      });
+    });
+
+    const timeoutId = window.setTimeout(() => {
+      resetScrollPosition();
+    }, 80);
+
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      if (secondFrame !== null) {
+        window.cancelAnimationFrame(secondFrame);
+      }
+      window.clearTimeout(timeoutId);
+    };
   }, [location]);
 
   return null;

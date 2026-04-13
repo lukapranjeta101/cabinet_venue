@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import frontImage from "../../front.webp";
+import frontImage from "../../front.png";
 
 export default function AboutUs() {
   return (

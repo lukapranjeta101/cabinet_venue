@@ -185,8 +185,8 @@ export default function CountertopScroll({
 	return (
 		<section ref={sectionRef} className="relative h-[600vh] bg-white">
 			<div className="sticky top-0 h-screen w-screen overflow-hidden bg-white">
-				<div className="relative flex h-full w-full flex-col items-start justify-start md:flex-row md:items-center">
-					<div className="relative z-10 flex w-full flex-col items-center justify-start px-6 pt-10 text-center md:w-[50%] md:items-start md:justify-center md:px-16 md:pt-0 md:text-left lg:px-20">
+				<div className="relative flex h-full w-full flex-col items-center justify-center gap-5 md:flex-row md:items-center md:justify-start md:gap-0">
+					<div className="relative z-10 flex w-full flex-col items-center justify-center px-6 text-center md:w-[50%] md:items-start md:justify-center md:px-16 md:pt-0 md:text-left lg:px-20">
 						<div className="max-w-md">
 							<div className="mb-4 flex items-center justify-center gap-3 text-sm tracking-[0.18em] text-primary/80 uppercase md:justify-start">
 								<span className="h-px w-6 bg-primary/40" />
@@ -200,7 +200,7 @@ export default function CountertopScroll({
 						</div>
 					</div>
 
-					<div className="relative mt-4 h-[42vh] w-full md:absolute md:inset-y-0 md:right-0 md:mt-0 md:h-auto md:w-[50%]">
+					<div className="relative h-[42vh] w-full max-w-2xl md:absolute md:inset-y-0 md:right-0 md:h-auto md:w-[50%] md:max-w-none">
 						{!isReady && (
 							<div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
 								<div className="flex flex-col items-center gap-4">
@@ -218,10 +218,12 @@ export default function CountertopScroll({
 						/>
 					</div>
 
-					<p className="mt-4 px-6 text-center text-base leading-relaxed text-muted-foreground md:hidden">{subtitle}</p>
-					<Button asChild className="mt-4 self-center bg-primary text-white hover:bg-primary/90 md:hidden">
-						<Link href="/countertops">Explore More</Link>
-					</Button>
+					<div className="flex flex-col items-center px-6 text-center md:hidden">
+						<p className="text-base leading-relaxed text-muted-foreground">{subtitle}</p>
+						<Button asChild className="mt-4 self-center bg-primary text-white hover:bg-primary/90">
+							<Link href="/countertops">Explore More</Link>
+						</Button>
+					</div>
 				</div>
 			</div>
 		</section>
