@@ -572,9 +572,15 @@
         // Return response immediately, don't wait for body reading
         return response;
       })
-      .catch(function (error) {
+      .catch(function (caughtError) {
+        var normalizedError =
+          caughtError instanceof Error ? caughtError : new Error(String(caughtError));
+
         entry.duration = Date.now() - startTime;
-        entry.error = { message: error.message, stack: error.stack };
+        entry.error = {
+          message: normalizedError.message,
+          stack: normalizedError.stack,
+        };
 
         store.networkRequests.push(entry);
         pruneBuffer(store.networkRequests, CONFIG.bufferSize.network);
@@ -583,10 +589,10 @@
           kind: "fetch",
           method: entry.method,
           url: entry.url,
-          message: error.message,
+          message: normalizedError.message,
         });
 
-        throw error;
+        throw normalizedError;
       });
   };
 

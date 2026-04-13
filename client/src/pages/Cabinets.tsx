@@ -71,12 +71,12 @@ export default function Cabinets() {
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
             {cabinetBrands.map((brand) => (
               <article key={brand.slug} className="border border-border/70 bg-white overflow-hidden shadow-sm">
-                <div className="h-72 bg-muted/40 flex items-center justify-center p-6">
+                <div className="h-80 md:h-72 bg-muted/40 flex items-center justify-center p-4 md:p-6">
                   {brand.previewImage ? (
                     <img
                       src={brand.previewImage}
                       alt={brand.name}
-                      className="max-w-full max-h-full object-contain"
+                      className="w-full h-full object-contain"
                       loading="lazy"
                     />
                   ) : (

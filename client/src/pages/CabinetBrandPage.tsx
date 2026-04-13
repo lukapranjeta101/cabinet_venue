@@ -135,11 +135,11 @@ export default function CabinetBrandPage({ brandSlug }: CabinetBrandPageProps) {
                       }
                     >
                       <figure className="h-full border border-transparent p-2 transition-colors group-hover:border-border/80">
-                        <div className="aspect-[4/3] w-full flex items-center justify-center bg-muted/30">
+                        <div className="aspect-[3/4] md:aspect-[4/3] w-full flex items-center justify-center bg-muted/30 p-2 md:p-3">
                           <img
                             src={image.src}
                             alt={`${brand.name} ${collection.name} ${image.title}`}
-                            className="max-w-full max-h-full object-contain"
+                            className="w-full h-full object-contain"
                             loading="lazy"
                           />
                         </div>
