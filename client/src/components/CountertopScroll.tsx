@@ -33,6 +33,9 @@ export default function CountertopScroll({
 	const lastDrawnFrameFloatRef = useRef(-1);
 	const rafRef = useRef<number | null>(null);
 	const [isReady, setIsReady] = useState(false);
+	const [isDesktop, setIsDesktop] = useState(() =>
+		typeof window !== "undefined" ? window.matchMedia("(min-width: 768px)").matches : false
+	);
 
 	const { scrollYProgress } = useScroll({
 		target: sectionRef,
@@ -75,7 +78,7 @@ export default function CountertopScroll({
 			const scale = Math.min(width / frame.naturalWidth, height / frame.naturalHeight);
 			const drawWidth = frame.naturalWidth * scale;
 			const drawHeight = frame.naturalHeight * scale;
-			const x = (width - drawWidth) / 2 - 8;
+			const x = (width - drawWidth) / 2;
 			const y = (height - drawHeight) / 2;
 
 			ctx.drawImage(frame, x, y, drawWidth, drawHeight);
@@ -128,7 +131,7 @@ export default function CountertopScroll({
 			setIsReady(loaded.length > 0);
 
 			if (loaded.length > 0) {
-				drawFrame(0);
+				drawFrame(currentProgressRef.current);
 			}
 		};
 
@@ -164,15 +167,28 @@ export default function CountertopScroll({
 	});
 
 	useEffect(() => {
+		const mediaQuery = window.matchMedia("(min-width: 768px)");
+		const updateIsDesktop = (event?: MediaQueryListEvent) => {
+			setIsDesktop(event ? event.matches : mediaQuery.matches);
+		};
+
+		updateIsDesktop();
+		mediaQuery.addEventListener("change", updateIsDesktop);
+
+		return () => mediaQuery.removeEventListener("change", updateIsDesktop);
+	}, []);
+
+	useEffect(() => {
 		const handleResize = () => {
 			if (!isReady || loadedFramesRef.current.length === 0) return;
 			lastDrawnFrameFloatRef.current = -1;
 			drawFrame(currentProgressRef.current);
 		};
 
+		handleResize();
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
-	}, [drawFrame, isReady]);
+	}, [drawFrame, isDesktop, isReady]);
 
 	useEffect(() => {
 		return () => {
@@ -185,46 +201,78 @@ export default function CountertopScroll({
 	return (
 		<section ref={sectionRef} className="relative h-[600vh] bg-white">
 			<div className="sticky top-0 h-screen w-screen overflow-hidden bg-white">
-				<div className="relative flex h-full w-full flex-col items-center justify-center gap-5 md:flex-row md:items-center md:justify-start md:gap-0">
-					<div className="relative z-10 flex w-full flex-col items-center justify-center px-6 text-center md:w-[50%] md:items-start md:justify-center md:px-16 md:pt-0 md:text-left lg:px-20">
-						<div className="max-w-md">
-							<div className="mb-4 flex items-center justify-center gap-3 text-sm tracking-[0.18em] text-primary/80 uppercase md:justify-start">
-								<span className="h-px w-6 bg-primary/40" />
-								<span>Countertops</span>
+				{isDesktop ? (
+					<div className="relative flex h-full w-full items-center">
+						<div className="relative z-10 flex w-[50%] flex-col items-start justify-center px-16 text-left lg:px-20">
+							<div className="max-w-md">
+								<div className="mb-4 flex items-center gap-3 text-sm tracking-[0.18em] text-primary/80 uppercase">
+									<span className="h-px w-6 bg-primary/40" />
+									<span>Countertops</span>
+								</div>
+								<h2 className="text-4xl font-bold leading-[1.1] tracking-tight text-[#111111] md:text-6xl">{title}</h2>
+								<p className="mt-6 text-base leading-relaxed text-muted-foreground md:text-lg">{subtitle}</p>
+								<Button asChild className="mt-6 bg-primary text-white hover:bg-primary/90">
+									<Link href="/countertops">Explore More</Link>
+								</Button>
 							</div>
-							<h2 className="text-4xl font-bold leading-[1.1] tracking-tight text-[#111111] md:text-6xl">{title}</h2>
-							<p className="mt-6 hidden text-base leading-relaxed text-muted-foreground md:block md:text-lg">{subtitle}</p>
-							<Button asChild className="mt-6 hidden bg-primary text-white hover:bg-primary/90 md:inline-flex">
-								<Link href="/countertops">Explore More</Link>
-							</Button>
+						</div>
+
+						<div className="absolute inset-y-0 right-0 w-[50%]">
+							{!isReady && (
+								<div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
+									<div className="flex flex-col items-center gap-4">
+										<div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
+										<p className="text-sm text-slate-600">Loading...</p>
+									</div>
+								</div>
+							)}
+							<canvas
+								ref={canvasRef}
+								className={`h-full w-full transition-opacity duration-300 ${isReady ? "opacity-100" : "opacity-0"}`}
+								style={{
+									display: "block",
+								}}
+							/>
 						</div>
 					</div>
-
-					<div className="relative h-[42vh] w-full max-w-2xl md:absolute md:inset-y-0 md:right-0 md:h-auto md:w-[50%] md:max-w-none">
-						{!isReady && (
-							<div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
-								<div className="flex flex-col items-center gap-4">
-									<div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
-									<p className="text-sm text-slate-600">Loading...</p>
+				) : (
+					<div className="absolute inset-0 flex items-center justify-center px-6">
+						<div className="flex w-full max-w-md flex-col items-center justify-center gap-5 text-center">
+							<div className="max-w-sm">
+								<div className="mb-4 flex items-center justify-center gap-3 text-sm tracking-[0.18em] text-primary/80 uppercase">
+									<span className="h-px w-6 bg-primary/40" />
+									<span>Countertops</span>
 								</div>
+								<h2 className="text-4xl font-bold leading-[1.1] tracking-tight text-[#111111]">{title}</h2>
 							</div>
-						)}
-						<canvas
-							ref={canvasRef}
-							className={`h-full w-full transition-opacity duration-300 ${isReady ? "opacity-100" : "opacity-0"}`}
-							style={{
-								display: "block",
-							}}
-						/>
-					</div>
 
-					<div className="flex flex-col items-center px-6 text-center md:hidden">
-						<p className="text-base leading-relaxed text-muted-foreground">{subtitle}</p>
-						<Button asChild className="mt-4 self-center bg-primary text-white hover:bg-primary/90">
-							<Link href="/countertops">Explore More</Link>
-						</Button>
+							<div className="relative h-[34vh] max-h-[320px] w-full">
+								{!isReady && (
+									<div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
+										<div className="flex flex-col items-center gap-4">
+											<div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
+											<p className="text-sm text-slate-600">Loading...</p>
+										</div>
+									</div>
+								)}
+								<canvas
+									ref={canvasRef}
+									className={`h-full w-full transition-opacity duration-300 ${isReady ? "opacity-100" : "opacity-0"}`}
+									style={{
+										display: "block",
+									}}
+								/>
+							</div>
+
+							<div className="max-w-sm">
+								<p className="text-base leading-relaxed text-muted-foreground">{subtitle}</p>
+								<Button asChild className="mt-4 bg-primary text-white hover:bg-primary/90">
+									<Link href="/countertops">Explore More</Link>
+								</Button>
+							</div>
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 		</section>
 	);
