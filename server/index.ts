@@ -10,10 +10,11 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
+  // ✅ CORRECT PATH
   const staticPath =
     process.env.NODE_ENV === "production"
-      ? path.join(__dirname, "client")
-      : path.resolve(__dirname, "..", "dist", "client");
+      ? path.join(__dirname, "public") // dist/public
+      : path.resolve(__dirname, "..", "dist", "public");
 
   app.use(express.static(staticPath));
 
