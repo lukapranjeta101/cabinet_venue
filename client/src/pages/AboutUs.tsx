@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Link } from "wouter";
-import { Award, Users, Zap } from "lucide-react";
+import frontImage from "../../front.webp";
 
 export default function AboutUs() {
   return (
@@ -16,25 +15,19 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* Company Story */}
+      {/* The Cabinet Venue Solution */}
       <section className="py-20 bg-white">
         <div className="container">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl font-bold mb-6 text-primary">Our Story</h2>
+              <h2 className="text-4xl font-bold mb-6 text-primary">The Cabinet Venue Solution</h2>
               <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-                Cabinet Venue was founded with a simple mission: to provide homeowners in Northeast Ohio with access to high-quality cabinetry, professional design services, and expert installation at affordable prices.
-              </p>
-              <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-                We believe that a beautiful kitchen or bathroom shouldn't require a luxury budget. By combining quality materials with skilled craftsmanship, we've helped hundreds of families create the homes of their dreams.
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Today, Cabinet Venue stands as a trusted local business in Euclid, Ohio, known for reliability, quality, and personalized service.
+                Cabinet Venue offers kitchen and bathroom products that combine professional quality and creative solutions to make you proud of the design in your home with prices that can’t be beat! Our work focuses on a mix of creativity and professionalism that is focused on your vision for your kitchen. When you work with us, you don’t just get discount prices. You get an amazing, professionally-crafted kitchen too!
               </p>
             </div>
             <div className="relative h-96">
               <img
-                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663426490300/kn7uSdQy55GNMguLj92vSE/showroom-interior-Zgfqnfz9J2ZpdxNj8vtPDA.webp"
+                src={frontImage}
                 alt="Cabinet Venue showroom"
                 className="w-full h-full object-cover rounded-lg shadow-lg"
               />
@@ -43,70 +36,62 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* Core Values */}
+      {/* What Makes Cabinet Venue Unique */}
       <section className="py-20 bg-background">
         <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-primary">Our Core Values</h2>
-            <div className="w-16 h-1 bg-accent mx-auto"></div>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="p-8 border-0 shadow-md">
-              <div className="w-16 h-16 bg-accent/10 rounded-lg flex items-center justify-center mb-6">
-                <Award className="w-8 h-8 text-accent" />
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-4xl font-bold mb-8 text-primary">What Makes Cabinet Venue Unique?</h2>
+            <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
+              <div>
+                <p className="font-bold text-primary mb-1">Expert Guidance</p>
+                <p>
+                  Come to us with hope that you can revitalize your outdated kitchen, and we will work with you from start to finish. We can start by scheduling a free measure for your kitchen.
+                </p>
               </div>
-              <h3 className="text-2xl font-bold mb-3 text-primary">Quality</h3>
-              <p className="text-muted-foreground">
-                We never compromise on the quality of our materials, craftsmanship, or service. Every cabinet is built to last.
-              </p>
-            </Card>
-            <Card className="p-8 border-0 shadow-md">
-              <div className="w-16 h-16 bg-accent/10 rounded-lg flex items-center justify-center mb-6">
-                <Users className="w-8 h-8 text-accent" />
+              <div>
+                <p className="font-bold text-primary mb-1">High-Quality Products</p>
+                <p>
+                  If you’ve ever felt your kitchen looks a little “bleak,” then you know the importance of outfitting your kitchen with quality. Cabinet Venue has the products and experience needed to take your kitchen and make it look incredible.
+                </p>
               </div>
-              <h3 className="text-2xl font-bold mb-3 text-primary">Customer Focus</h3>
-              <p className="text-muted-foreground">
-                Your satisfaction is our priority. We listen to your needs and deliver personalized solutions.
-              </p>
-            </Card>
-            <Card className="p-8 border-0 shadow-md">
-              <div className="w-16 h-16 bg-accent/10 rounded-lg flex items-center justify-center mb-6">
-                <Zap className="w-8 h-8 text-accent" />
+              <div>
+                <p className="font-bold text-primary mb-1">Discount Prices</p>
+                <p>
+                  Tired of seeing something you want, only to look at the price tag and walk away, filled with sadness? We believe that great quality and a beautiful design for your kitchen should be affordable to all. Our prices are affordable so that you can have a kitchen that you are happy to walk into!
+                </p>
               </div>
-              <h3 className="text-2xl font-bold mb-3 text-primary">Efficiency</h3>
-              <p className="text-muted-foreground">
-                We work efficiently to deliver your project on time and within budget, without cutting corners.
-              </p>
-            </Card>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Team Section */}
+      {/* Upgrading the Standard of Kitchen Design */}
       <section className="py-20 bg-white">
         <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-primary">Our Team</h2>
-            <div className="w-16 h-1 bg-accent mx-auto"></div>
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-4xl font-bold mb-6 text-primary">Upgrading the Standard of Kitchen Design</h2>
+            <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
+              Cabinet Venue started as a dream that blossomed from being tired of settling for an outdated kitchen because of high prices. We built up a reputation for affordable prices and quality products, and set out to make sure that every client and contractor loved the end product.
+            </p>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              We strive to combine expert skills with a solid work ethic and a genuine care for our customers. When you work with Cabinet Venue, it&apos;s not just about quality products and affordable prices. Our customers are extremely happy because we know what it&apos;s like to not be happy with the current look of your kitchen, and we show that care in our work.
+            </p>
           </div>
-          <p className="text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-12">
-            Our experienced team of designers, craftsmen, and installation specialists are dedicated to bringing your vision to life. With years of experience in the kitchen and bath industry, we know how to create beautiful, functional spaces.
-          </p>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { name: "John Smith", role: "Owner & Lead Designer", desc: "20+ years in cabinet design and installation" },
-              { name: "Maria Garcia", role: "Senior Designer", desc: "Expert in kitchen layouts and space optimization" },
-              { name: "David Chen", role: "Installation Manager", desc: "Ensures every project is completed to perfection" },
-            ].map((member, idx) => (
-              <Card key={idx} className="p-8 border-0 shadow-md text-center">
-                <div className="w-24 h-24 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-4xl font-bold text-accent">{member.name.charAt(0)}</span>
-                </div>
-                <h3 className="text-xl font-bold mb-2 text-primary">{member.name}</h3>
-                <p className="text-accent font-semibold mb-2">{member.role}</p>
-                <p className="text-muted-foreground">{member.desc}</p>
-              </Card>
-            ))}
+        </div>
+      </section>
+
+      {/* Ready to Help */}
+      <section className="py-20 bg-background">
+        <div className="container">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-4xl font-bold mb-6 text-primary">Cabinet Venue Is Ready to Help!</h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Don’t continue to settle for a kitchen that you aren’t happy with. Start the transformation of your kitchen with a free measure from one of our expert contractors. Call us today at{" "}
+              <a href="tel:4405610354" className="text-primary font-semibold underline underline-offset-4">
+                440-561-0354
+              </a>{" "}
+              to learn more about how Cabinet Venue can design the kitchen you’ve always wanted!
+            </p>
           </div>
         </div>
       </section>
@@ -116,10 +101,10 @@ export default function AboutUs() {
         <div className="container text-center">
           <h2 className="text-4xl font-bold mb-8">Ready to Work With Us?</h2>
           <p className="text-xl mb-8 text-gray-100 max-w-2xl mx-auto">
-            Let's discuss your kitchen or bathroom renovation project and create something beautiful together.
+            Let&apos;s discuss your kitchen or bathroom renovation project and create something beautiful together.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Button asChild className="bg-accent hover:bg-accent/90 text-primary px-8 py-6 text-lg font-semibold">
+            <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-6 text-lg font-semibold">
               <Link href="/quote">Get a Free Quote</Link>
             </Button>
             <Button

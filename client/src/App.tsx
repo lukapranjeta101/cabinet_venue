@@ -9,9 +9,10 @@ import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import Services from "./pages/Services";
 import Cabinets from "./pages/Cabinets";
+import CabinetBrandPage from "./pages/CabinetBrandPage";
+import CustomBuild from "./pages/CustomBuild";
 import Countertops from "./pages/Countertops";
 import Flooring from "./pages/Flooring";
-import Gallery from "./pages/Gallery";
 import Quote from "./pages/Quote";
 import ContactUs from "./pages/ContactUs";
 
@@ -23,9 +24,10 @@ function Router() {
         <Route path="/about-us" component={AboutUs} />
         <Route path="/services" component={Services} />
         <Route path="/cabinets" component={Cabinets} />
+        <Route path="/cabinets/custom-build" component={CustomBuild} />
+        <Route path="/cabinets/:brand">{({ brand }: { brand: string }) => <CabinetBrandPage brandSlug={brand} />}</Route>
         <Route path="/countertops" component={Countertops} />
         <Route path="/flooring" component={Flooring} />
-        <Route path="/gallery" component={Gallery} />
         <Route path="/quote" component={Quote} />
         <Route path="/contact-us" component={ContactUs} />
         <Route path="/404" component={NotFound} />

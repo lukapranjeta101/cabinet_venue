@@ -1,166 +1,152 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { cabinetBrands, cabinetSectionLinks, customCabinetLink } from "@/lib/cabinetCatalog";
+import { ChevronRight } from "lucide-react";
+import { useState } from "react";
 import { Link } from "wouter";
 
 export default function Cabinets() {
+  const [selectedCabinetHref, setSelectedCabinetHref] = useState(cabinetBrands[0] ? `/cabinets/${cabinetBrands[0].slug}` : "/cabinets");
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Hero Section */}
       <section className="bg-primary text-white py-20">
         <div className="container">
-          <h1 className="text-5xl font-bold mb-6">Kitchen & Bathroom Cabinets</h1>
-          <p className="text-xl text-gray-100 max-w-2xl">
-            Premium cabinetry in a variety of styles, finishes, and configurations to match your home.
-          </p>
-        </div>
-      </section>
-
-      {/* Cabinet Styles */}
-      <section className="py-20 bg-white">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-primary">Cabinet Styles</h2>
-            <div className="w-16 h-1 bg-accent mx-auto"></div>
-          </div>
-          <div className="grid md:grid-cols-2 gap-12 mb-16">
-            {[
-              {
-                title: "Modern Minimalist",
-                desc: "Clean lines, sleek finishes, and contemporary hardware. Perfect for modern homes.",
-                features: ["Flat-panel doors", "Minimalist hardware", "Neutral finishes", "Open shelving options"],
-                img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663426490300/kn7uSdQy55GNMguLj92vSE/hero-kitchen-4vRGYuxGNodsSd5UHWj3JY.webp",
-              },
-              {
-                title: "Traditional Classic",
-                desc: "Timeless designs with detailed craftsmanship. Elegant and enduring style.",
-                features: ["Raised-panel doors", "Decorative hardware", "Rich finishes", "Detailed molding"],
-                img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663426490300/kn7uSdQy55GNMguLj92vSE/cabinet-details-akAKJa6SVP7wwBrGjjutvB.webp",
-              },
-              {
-                title: "Transitional",
-                desc: "Blends modern and traditional elements for a balanced, versatile look.",
-                features: ["Shaker-style doors", "Mixed finishes", "Versatile hardware", "Balanced proportions"],
-                img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663426490300/kn7uSdQy55GNMguLj92vSE/kitchen-remodel-before-after-LtV3yEXvvwAnLDRP7TfedS.webp",
-              },
-              {
-                title: "Rustic Farmhouse",
-                desc: "Warm, inviting designs with natural materials and vintage charm.",
-                features: ["Wood grain finishes", "Rustic hardware", "Warm tones", "Distressed options"],
-                img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663426490300/kn7uSdQy55GNMguLj92vSE/showroom-interior-Zgfqnfz9J2ZpdxNj8vtPDA.webp",
-              },
-            ].map((style, idx) => (
-              <Card key={idx} className="p-8 border-0 shadow-md overflow-hidden">
-                <div className="h-48 mb-6 overflow-hidden rounded-lg">
-                  <img src={style.img} alt={style.title} className="w-full h-full object-cover" />
-                </div>
-                <h3 className="text-2xl font-bold mb-3 text-primary">{style.title}</h3>
-                <p className="text-muted-foreground mb-4">{style.desc}</p>
-                <div className="mb-6">
-                  <p className="font-semibold text-primary mb-2">Features:</p>
-                  <ul className="space-y-1 text-muted-foreground">
-                    {style.features.map((feature, i) => (
-                      <li key={i}>• {feature}</li>
-                    ))}
-                  </ul>
-                </div>
-                <Button asChild className="w-full bg-accent hover:bg-accent/90 text-primary">
-                  <Link href="/quote">Learn More</Link>
-                </Button>
-              </Card>
-            ))}
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent mb-4">Cabinet Collections</p>
+            <h1 className="text-5xl font-bold mb-6">Kitchen & Bathroom Cabinets</h1>
+            <p className="text-xl text-gray-100 max-w-2xl">
+              Explore dedicated pages for each cabinet line and compare the styles, finishes, and collections that best fit your project.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Finishes & Materials */}
-      <section className="py-20 bg-background">
+      <section className="py-12 bg-white border-b border-border/70">
         <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-primary">Finishes & Materials</h2>
-            <div className="w-16 h-1 bg-accent mx-auto"></div>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Solid Wood",
-                desc: "Premium hardwoods for durability and natural beauty. Timeless and elegant.",
-              },
-              {
-                name: "Plywood",
-                desc: "Strong, stable construction with excellent finish options. Great value.",
-              },
-              {
-                name: "Thermofoil",
-                desc: "Durable, moisture-resistant finish. Perfect for kitchens and bathrooms.",
-              },
-              {
-                name: "Laminate",
-                desc: "Wide range of colors and patterns. Budget-friendly and easy to maintain.",
-              },
-              {
-                name: "Veneer",
-                desc: "Beautiful wood appearance with excellent stability. Premium look.",
-              },
-              {
-                name: "Painted",
-                desc: "Custom colors to match your design. Modern and versatile option.",
-              },
-            ].map((finish, idx) => (
-              <Card key={idx} className="p-6 border-0 shadow-md">
-                <h3 className="text-xl font-bold mb-2 text-primary">{finish.name}</h3>
-                <p className="text-muted-foreground">{finish.desc}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+          <div className="grid gap-6 lg:grid-cols-[1.6fr_0.9fr] lg:items-end">
+            <div>
+              <h2 className="text-3xl font-bold text-primary mb-3">Find A Cabinet Line</h2>
+              <p className="text-muted-foreground max-w-2xl">
+                Use the dropdown to jump directly into a specific cabinet brand, or browse the full collection cards below.
+              </p>
+            </div>
 
-      {/* Hardware & Accessories */}
-      <section className="py-20 bg-white">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-primary">Hardware & Accessories</h2>
-            <div className="w-16 h-1 bg-accent mx-auto"></div>
-          </div>
-          <p className="text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-12">
-            Complete your cabinets with our selection of premium hardware and organizational accessories.
-          </p>
-          <div className="grid md:grid-cols-2 gap-8">
-            {[
-              {
-                title: "Hardware Options",
-                items: ["Soft-close hinges", "Drawer slides", "Knobs and pulls", "Handles", "Specialty hinges"],
-              },
-              {
-                title: "Accessories",
-                items: ["Pull-out organizers", "Spice racks", "Trash bins", "Shelf dividers", "Lighting"],
-              },
-            ].map((category, idx) => (
-              <Card key={idx} className="p-8 border-0 shadow-md">
-                <h3 className="text-2xl font-bold mb-6 text-primary">{category.title}</h3>
-                <ul className="space-y-3">
-                  {category.items.map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-muted-foreground">
-                      <span className="w-2 h-2 bg-accent rounded-full"></span>
-                      {item}
-                    </li>
+            <div className="border border-border/70 bg-white p-4 shadow-sm">
+              <label htmlFor="cabinet-brand-select" className="block text-sm font-semibold text-primary mb-2">
+                Cabinet brand
+              </label>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <select
+                  id="cabinet-brand-select"
+                  value={selectedCabinetHref}
+                  onChange={(event) => setSelectedCabinetHref(event.target.value)}
+                  className="flex-1 rounded-none border border-border bg-white px-4 py-3 text-base text-primary outline-none transition-colors focus:border-accent"
+                >
+                  {cabinetSectionLinks.map((brand) => (
+                    <option key={brand.href} value={brand.href}>
+                      {brand.label}
+                    </option>
                   ))}
-                </ul>
-              </Card>
-            ))}
+                </select>
+
+                <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground sm:self-stretch">
+                  <Link href={selectedCabinetHref}>View Page</Link>
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      <section className="py-20 bg-white">
+        <div className="container">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-primary">Cabinet Brands</h2>
+            <div className="w-16 h-1 bg-accent mx-auto"></div>
+            <p className="text-muted-foreground mt-4 max-w-3xl mx-auto">
+              Every cabinet line below opens into its own page so customers can browse finishes and collections without leaving the overall cabinets section.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+            {cabinetBrands.map((brand) => (
+              <article key={brand.slug} className="border border-border/70 bg-white overflow-hidden shadow-sm">
+                <div className="h-72 bg-muted/40 flex items-center justify-center p-6">
+                  {brand.previewImage ? (
+                    <img
+                      src={brand.previewImage}
+                      alt={brand.name}
+                      className="max-w-full max-h-full object-contain"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="text-center text-muted-foreground">
+                      <p className="font-semibold">{brand.name}</p>
+                      <p className="text-sm mt-2">Images coming soon</p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-8">
+                  <div className="flex flex-wrap gap-3 mb-4">
+                    <div className="inline-flex items-center rounded-full bg-accent/10 text-accent px-4 py-2 text-sm font-semibold">
+                      {brand.imageCount} styles
+                    </div>
+                    <div className="inline-flex items-center rounded-full bg-primary/5 text-primary px-4 py-2 text-sm font-semibold">
+                      {brand.collections.length} collections
+                    </div>
+                  </div>
+
+                  <h3 className="text-3xl font-bold text-primary">{brand.name}</h3>
+                  <p className="text-muted-foreground mt-3 leading-relaxed">{brand.description}</p>
+                  <p className="text-muted-foreground/90 mt-4">{brand.overview}</p>
+
+                  <Button asChild variant="outline" className="mt-8 border-primary text-primary hover:bg-primary hover:text-white">
+                    <Link href={`/cabinets/${brand.slug}`} className="inline-flex items-center gap-2">
+                      <span>Explore {brand.name}</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </article>
+            ))}
+
+            <article className="border border-border/70 bg-white overflow-hidden shadow-sm">
+              <div className="p-8">
+                <div className="flex flex-wrap gap-3 mb-4">
+                  <div className="inline-flex items-center rounded-full bg-accent/10 text-accent px-4 py-2 text-sm font-semibold">
+                    Full custom path
+                  </div>
+                  <div className="inline-flex items-center rounded-full bg-primary/5 text-primary px-4 py-2 text-sm font-semibold">
+                    Marsh Cabinets
+                  </div>
+                </div>
+
+                <h3 className="text-3xl font-bold text-primary">Full Custom Build</h3>
+                <p className="text-muted-foreground mt-3 leading-relaxed">
+                  Ideal for projects that need more layout flexibility and finish options beyond stocked cabinet lines.
+                </p>
+
+                <Button asChild variant="outline" className="mt-6 border-primary text-primary hover:bg-primary hover:text-white">
+                  <Link href={customCabinetLink.href} className="inline-flex items-center gap-2">
+                    <span>Explore Custom Build</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section className="py-20 bg-primary text-white">
         <div className="container text-center">
-          <h2 className="text-4xl font-bold mb-8">Find Your Perfect Cabinets</h2>
+          <h2 className="text-4xl font-bold mb-8">Need Help Choosing A Cabinet Line?</h2>
           <p className="text-xl mb-8 text-gray-100 max-w-2xl mx-auto">
-            Let our designers help you select the perfect cabinets for your kitchen or bathroom.
+            Tell us about your style, layout, and budget, and we can guide you to the cabinet collection that fits your project best.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Button asChild className="bg-accent hover:bg-accent/90 text-primary px-8 py-6 text-lg font-semibold">
+            <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-6 text-lg font-semibold">
               <Link href="/quote">Get a Free Quote</Link>
             </Button>
             <Button

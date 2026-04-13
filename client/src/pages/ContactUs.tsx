@@ -160,7 +160,7 @@ export default function ContactUs() {
                 </div>
 
                 {/* Submit */}
-                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-primary py-3 font-semibold text-lg">
+                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground py-3 font-semibold text-lg">
                   Send Message
                 </Button>
               </form>
@@ -221,7 +221,7 @@ export default function ContactUs() {
             Contact us today or request a free quote to discuss your kitchen or bathroom project.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Button asChild className="bg-accent hover:bg-accent/90 text-primary px-8 py-6 text-lg font-semibold">
+            <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-6 text-lg font-semibold">
               <Link href="/quote">Get a Free Quote</Link>
             </Button>
             <Button

@@ -1,7 +1,35 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Link } from "wouter";
-import { Check } from "lucide-react";
+
+import graniteImage from "/granite.png";
+import quartzImage from "/countertop-quartz.jpg";
+import laminateImage from "/countertop-laminate.jpg";
+
+const countertopTypes = [
+  {
+    name: "Granite",
+    image: graniteImage,
+    description: [
+      "Granite is a fantastic choice for kitchen countertops because of its ability to withstand heavy usage. It has become a popular choice for not only its durability, but also for the amazing design. These countertops can fit in with practically every kitchen, and come in many different colors.",
+      "When you choose Cabinet Venue for your granite countertop, we will take you to pick out the type of granite you wish to have installed in your kitchen and bath. From there, we custom cut it and handle the installation to build a beautiful display in your home.",
+    ],
+  },
+  {
+    name: "Quartz",
+    image: quartzImage,
+    description: [
+      "The quartz countertop has become a popular choice due to the unique aesthetic appeal that includes color and a sense of fluidity. It combines long-lasting strength with a beautiful display that will survive the test of time. The unique surface is unforgettable, and you will be loving the look of your kitchen thanks to this addition.",
+      "Our team of experts is available and ready to custom cut your selection and install it for your kitchen and bath countertops. Choose the countertop you would like to have installed in your home, and we will be with you from start to finish as you watch this new addition to your home bring with it a unique presence.",
+    ],
+  },
+  {
+    name: "Custom Laminate",
+    image: laminateImage,
+    description: [
+      "Cabinet Venue also offers an array of budget friendly laminate countertops to be installed in your home. Laminate countertops offer a variety of blends and beautiful finishes that are extremely durable. Choose one that fits your budget, and let out team of expert designers handle the installation.",
+    ],
+  },
+];
 
 export default function Countertops() {
   return (
@@ -16,148 +44,32 @@ export default function Countertops() {
         </div>
       </section>
 
-      {/* Countertop Materials */}
+      {/* Countertop Types */}
       <section className="py-20 bg-white">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-primary">Countertop Materials</h2>
+            <h2 className="text-4xl font-bold mb-4 text-primary">Countertop Types</h2>
             <div className="w-16 h-1 bg-accent mx-auto"></div>
           </div>
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
-            {[
-              {
-                name: "Granite",
-                desc: "Natural stone with unique patterns. Extremely durable and heat-resistant.",
-                pros: ["Unique patterns", "Heat resistant", "Very durable", "High-end appearance"],
-                cons: ["Requires sealing", "Higher cost", "Needs maintenance"],
-              },
-              {
-                name: "Quartz",
-                desc: "Engineered stone combining durability with consistent appearance.",
-                pros: ["Non-porous", "Low maintenance", "Consistent look", "Durable"],
-                cons: ["Can be pricey", "Limited edge options", "Not heat-proof"],
-              },
-              {
-                name: "Marble",
-                desc: "Elegant natural stone with classic beauty and timeless appeal.",
-                pros: ["Beautiful appearance", "Elegant look", "Cool to touch", "Unique patterns"],
-                cons: ["Requires sealing", "Stains easily", "Softer material", "Higher maintenance"],
-              },
-              {
-                name: "Laminate",
-                desc: "Budget-friendly option with wide range of colors and patterns.",
-                pros: ["Affordable", "Many styles", "Easy to clean", "Quick installation"],
-                cons: ["Less durable", "Can chip", "Visible seams", "Lower resale value"],
-              },
-              {
-                name: "Solid Surface",
-                desc: "Seamless, non-porous material that's easy to maintain and repair.",
-                pros: ["Seamless", "Repairable", "Non-porous", "Easy to clean"],
-                cons: ["Can scratch", "Heat sensitive", "Lower durability", "Moderate cost"],
-              },
-              {
-                name: "Butcher Block",
-                desc: "Warm wood surface that adds natural character to your kitchen.",
-                pros: ["Warm appearance", "Affordable", "Renewable", "Unique character"],
-                cons: ["Requires maintenance", "Water damage risk", "Stains easily", "Shorter lifespan"],
-              },
-            ].map((material, idx) => (
-              <Card key={idx} className="p-8 border-0 shadow-md">
-                <h3 className="text-2xl font-bold mb-2 text-primary">{material.name}</h3>
-                <p className="text-muted-foreground mb-6">{material.desc}</p>
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <p className="font-semibold text-primary mb-3">Pros:</p>
-                    <ul className="space-y-2">
-                      {material.pros.map((pro, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                          <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                          {pro}
-                        </li>
-                      ))}
-                    </ul>
+          <div className="space-y-10">
+            {countertopTypes.map((type, idx) => (
+              <article key={type.name} className="border border-border/70 bg-white overflow-hidden">
+                <div className={`grid lg:grid-cols-2 ${idx % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}>
+                  <div className="h-72 md:h-96 bg-muted">
+                    <img src={type.image} alt={type.name} className="w-full h-full object-cover" loading="lazy" />
                   </div>
-                  <div>
-                    <p className="font-semibold text-primary mb-3">Cons:</p>
-                    <ul className="space-y-2">
-                      {material.cons.map((con, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                          <span className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5">×</span>
-                          {con}
-                        </li>
+                  <div className="p-8 md:p-10">
+                    <h3 className="text-3xl font-bold mb-5 text-primary">{type.name}</h3>
+                    <div className="space-y-4">
+                      {type.description.map((paragraph) => (
+                        <p key={paragraph} className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                          {paragraph}
+                        </p>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Color & Style Options */}
-      <section className="py-20 bg-background">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-primary">Colors & Styles</h2>
-            <div className="w-16 h-1 bg-accent mx-auto"></div>
-          </div>
-          <p className="text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-12">
-            We offer a wide range of colors and finishes to complement your cabinet style and home décor.
-          </p>
-          <div className="grid md:grid-cols-4 gap-6">
-            {[
-              { name: "Classic White", color: "bg-white border-2 border-gray-300" },
-              { name: "Warm Beige", color: "bg-amber-100" },
-              { name: "Soft Gray", color: "bg-gray-300" },
-              { name: "Black", color: "bg-black" },
-              { name: "Marble Look", color: "bg-gradient-to-br from-white to-gray-200" },
-              { name: "Granite Look", color: "bg-gradient-to-br from-gray-600 to-gray-900" },
-              { name: "Wood Grain", color: "bg-amber-700" },
-              { name: "Concrete", color: "bg-gray-500" },
-            ].map((style, idx) => (
-              <div key={idx} className="text-center">
-                <div className={`h-32 rounded-lg mb-4 shadow-md ${style.color}`}></div>
-                <p className="font-semibold text-primary">{style.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Maintenance & Care */}
-      <section className="py-20 bg-white">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-primary">Maintenance & Care</h2>
-            <div className="w-16 h-1 bg-accent mx-auto"></div>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Daily Cleaning",
-                tips: ["Wipe with soft cloth", "Use mild soap and water", "Dry immediately", "Avoid abrasive cleaners"],
-              },
-              {
-                title: "Regular Maintenance",
-                tips: ["Seal as needed", "Polish periodically", "Avoid harsh chemicals", "Use cutting boards"],
-              },
-              {
-                title: "Long-term Care",
-                tips: ["Professional sealing", "Repair chips promptly", "Protect from heat", "Use trivets and pads"],
-              },
-            ].map((care, idx) => (
-              <Card key={idx} className="p-8 border-0 shadow-md">
-                <h3 className="text-2xl font-bold mb-6 text-primary">{care.title}</h3>
-                <ul className="space-y-3">
-                  {care.tips.map((tip, i) => (
-                    <li key={i} className="flex items-center gap-3 text-muted-foreground">
-                      <span className="w-2 h-2 bg-accent rounded-full"></span>
-                      {tip}
-                    </li>
-                  ))}
-                </ul>
-              </Card>
+              </article>
             ))}
           </div>
         </div>
@@ -171,7 +83,7 @@ export default function Countertops() {
             Our experts can help you select the ideal countertop material for your kitchen or bathroom.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Button asChild className="bg-accent hover:bg-accent/90 text-primary px-8 py-6 text-lg font-semibold">
+            <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-6 text-lg font-semibold">
               <Link href="/quote">Get a Free Quote</Link>
             </Button>
             <Button

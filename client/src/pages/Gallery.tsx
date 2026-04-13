@@ -134,7 +134,7 @@ export default function Gallery() {
             See how we can transform your kitchen or bathroom. Contact us for a free consultation.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Button asChild className="bg-accent hover:bg-accent/90 text-primary px-8 py-6 text-lg font-semibold">
+            <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-6 text-lg font-semibold">
               <Link href="/quote">Get a Free Quote</Link>
             </Button>
             <Button

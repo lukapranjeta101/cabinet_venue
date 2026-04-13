@@ -69,7 +69,7 @@ export default function Quote() {
                     <p className="text-muted-foreground mb-4">
                       We've received your quote request. We'll contact you within 24 hours.
                     </p>
-                    <Button asChild className="bg-accent hover:bg-accent/90 text-primary">
+                    <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
                       <Link href="/">Back to Home</Link>
                     </Button>
                   </div>
@@ -199,7 +199,7 @@ export default function Quote() {
                     </div>
 
                     {/* Submit */}
-                    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-primary py-3 font-semibold text-lg">
+                    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground py-3 font-semibold text-lg">
                       Request Quote
                     </Button>
                   </form>
