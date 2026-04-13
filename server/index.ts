@@ -10,16 +10,13 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
-  // ✅ FIXED PATH
   const staticPath =
     process.env.NODE_ENV === "production"
-      ? __dirname // dist/
-      : path.resolve(__dirname, "..", "dist");
+      ? path.join(__dirname, "client")
+      : path.resolve(__dirname, "..", "dist", "client");
 
-  // Serve frontend
   app.use(express.static(staticPath));
 
-  // SPA fallback
   app.get("*", (_req, res) => {
     res.sendFile(path.join(staticPath, "index.html"));
   });
