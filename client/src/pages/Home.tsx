@@ -84,6 +84,9 @@ const SECTION2_IMAGES = Object.entries(
  */
 
 export default function Home() {
+  const sectionRevealViewport = { once: true, amount: 0.28 };
+  const cardRevealViewport = { once: true, amount: 0.68 };
+
   const [section2Index, setSection2Index] = useState(0);
   const aboutSectionRef = useRef<HTMLElement | null>(null);
   const totalSection2Images = SECTION2_IMAGES.length;
@@ -110,7 +113,7 @@ export default function Home() {
 
   const { scrollYProgress: aboutReadProgress } = useScroll({
     target: aboutSectionRef,
-    offset: ["start 120%", "end 30%"],
+    offset: ["start 88%", "end 30%"],
   });
 
   const displayCharCount = useTransform(aboutReadProgress, [0, 0.55, 1], [0, charCount, charCount]);
@@ -136,7 +139,13 @@ export default function Home() {
       <section className="bg-background py-0">
         <div className="w-full overflow-hidden border-t border-border/60 bg-white shadow-sm">
           <div className="grid grid-cols-2 gap-0 md:h-[86svh] md:grid-cols-12 md:grid-rows-[2fr_1fr]">
-            <div className="relative col-span-2 h-[320px] overflow-hidden md:col-span-6 md:row-span-2 md:h-auto md:min-h-full">
+            <motion.div
+              className="relative col-span-2 h-[320px] overflow-hidden md:col-span-6 md:row-span-2 md:h-auto md:min-h-full"
+              initial={{ opacity: 0, x: -56, filter: "blur(4px)" }}
+              whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.75, ease: "easeOut" }}
+              viewport={sectionRevealViewport}
+            >
               <img src={activeSection2Image} alt={`Kitchen design spotlight ${section2Index + 1}`} className="absolute inset-0 h-full w-full object-cover" />
 
               <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center justify-center gap-5 rounded-full border border-white/35 bg-black/35 px-5 py-2.5 text-white backdrop-blur-sm md:bottom-9">
@@ -162,16 +171,51 @@ export default function Home() {
                   <ChevronRight className="h-5 w-5" />
                 </button>
               </div>
-            </div>
+            </motion.div>
 
-              <div className="col-span-2 md:col-span-6 bg-white px-8 py-10 md:px-12 md:py-14 lg:px-14">
-                <h3 className="text-4xl font-bold tracking-tight text-primary md:text-5xl">Modern Kitchen Dreams</h3>
-                <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+              <motion.div
+                className="col-span-2 md:col-span-6 bg-white px-8 py-10 md:px-12 md:py-14 lg:px-14"
+                initial="hidden"
+                whileInView="visible"
+                viewport={sectionRevealViewport}
+                variants={{
+                  hidden: {},
+                  visible: {
+                    transition: {
+                      staggerChildren: 0.12,
+                    },
+                  },
+                }}
+              >
+                <motion.h3
+                  className="text-4xl font-bold tracking-tight text-primary md:text-5xl"
+                  variants={{
+                    hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
+                    visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+                  }}
+                  transition={{ duration: 0.55, ease: "easeOut" }}
+                >
+                  Modern Kitchen Dreams
+                </motion.h3>
+                <motion.p
+                  className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground"
+                  variants={{
+                    hidden: { opacity: 0, y: 12 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  transition={{ duration: 0.55, ease: "easeOut" }}
+                >
                   A clean, modern layout built around smart storage, durable materials, and timeless cabinetry details. Our team designs each kitchen to feel elevated, functional, and tailored to everyday living.
-                </p>
-              </div>
+                </motion.p>
+              </motion.div>
 
-              <div className="md:col-span-3 flex h-full flex-col justify-between bg-accent/35 px-8 py-8 md:px-9 md:py-9">
+              <motion.div
+                className="md:col-span-3 flex h-full flex-col justify-between bg-accent/35 px-8 py-8 md:px-9 md:py-9"
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                viewport={cardRevealViewport}
+              >
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary/70">Meeting</p>
                   <h4 className="mt-3 text-3xl font-bold leading-[1.12] tracking-tight text-primary">Schedule a design consultation</h4>
@@ -179,9 +223,15 @@ export default function Home() {
                 <Button asChild className="mt-6 bg-primary text-white hover:bg-primary/90">
                   <Link href="/quote">Book Now</Link>
                 </Button>
-              </div>
+              </motion.div>
 
-              <div className="relative md:col-span-3 overflow-hidden border-l border-border/60">
+              <motion.div
+                className="relative md:col-span-3 overflow-hidden border-l border-border/60"
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut", delay: 0.06 }}
+                viewport={cardRevealViewport}
+              >
                 <img
                   src="https://d2xsxph8kpxj0f.cloudfront.net/310519663426490300/kn7uSdQy55GNMguLj92vSE/kitchen-remodel-before-after-LtV3yEXvvwAnLDRP7TfedS.webp"
                   alt="Kitchen gallery preview"
@@ -196,7 +246,7 @@ export default function Home() {
                     <Link href="/quote">Get Quote</Link>
                   </Button>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
       </section>

@@ -1,4 +1,4 @@
-import { useMotionValueEvent, useScroll } from "framer-motion";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ export default function CountertopScroll({
 	title = "Premium Countertops",
 	subtitle = "Explore our curated selection",
 }: CountertopScrollProps) {
+	const sectionRevealViewport = { once: true, amount: 0.68 };
 	const sectionRef = useRef<HTMLDivElement | null>(null);
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const loadedFramesRef = useRef<HTMLImageElement[]>([]);
@@ -80,13 +81,15 @@ export default function CountertopScroll({
 			const drawHeight = frame.naturalHeight * scale;
 			const x = (width - drawWidth) / 2;
 			const y = (height - drawHeight) / 2;
-			// Remove a tiny left-edge artifact line that appears in the source sequence.
-			const sourceInsetX = Math.max(1, Math.round(frame.naturalWidth * 0.0025));
+			// Crop both source edges to eliminate frame-sequence seam artifacts.
+			const sourceInsetLeft = Math.max(6, Math.round(frame.naturalWidth * 0.01));
+			const sourceInsetRight = Math.max(6, Math.round(frame.naturalWidth * 0.01));
+			const sourceWidth = Math.max(1, frame.naturalWidth - sourceInsetLeft - sourceInsetRight);
 			ctx.drawImage(
 				frame,
-				sourceInsetX,
+				sourceInsetLeft,
 				0,
-				frame.naturalWidth - sourceInsetX,
+				sourceWidth,
 				frame.naturalHeight,
 				x,
 				y,
@@ -214,7 +217,13 @@ export default function CountertopScroll({
 			<div className="sticky top-0 h-screen w-screen overflow-hidden bg-white">
 				{isDesktop ? (
 					<div className="relative flex h-full w-full items-center">
-						<div className="relative z-10 flex w-[50%] flex-col items-start justify-center px-16 text-left lg:px-20">
+						<motion.div
+							className="relative z-10 flex w-[50%] flex-col items-start justify-center px-16 text-left lg:px-20"
+							initial={{ opacity: 0, y: 18 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.5, ease: "easeOut" }}
+							viewport={sectionRevealViewport}
+						>
 							<div className="max-w-md">
 								<div className="mb-4 flex items-center gap-3 text-sm tracking-[0.18em] text-primary/80 uppercase">
 									<span>Countertops</span>
@@ -225,10 +234,9 @@ export default function CountertopScroll({
 									<Link href="/countertops">Explore More</Link>
 								</Button>
 							</div>
-						</div>
+						</motion.div>
 
 							<div className="absolute inset-y-0 right-0 w-[50%]">
-								<div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-3 bg-white" />
 								{!isReady && (
 									<div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
 										<div className="flex flex-col items-center gap-4">
@@ -248,7 +256,13 @@ export default function CountertopScroll({
 					</div>
 				) : (
 					<div className="absolute inset-0 flex items-center justify-center px-6">
-						<div className="flex w-full max-w-md flex-col items-center justify-center gap-5 text-center">
+						<motion.div
+							className="flex w-full max-w-md flex-col items-center justify-center gap-5 text-center"
+							initial={{ opacity: 0, y: 18 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.5, ease: "easeOut" }}
+							viewport={sectionRevealViewport}
+						>
 							<div className="max-w-sm">
 								<div className="mb-4 flex items-center justify-center gap-3 text-sm tracking-[0.18em] text-primary/80 uppercase">
 									<span>Countertops</span>
@@ -257,7 +271,6 @@ export default function CountertopScroll({
 							</div>
 
 								<div className="relative h-[34vh] max-h-[320px] w-full">
-									<div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-2 bg-white" />
 									{!isReady && (
 										<div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
 										<div className="flex flex-col items-center gap-4">
@@ -281,7 +294,7 @@ export default function CountertopScroll({
 									<Link href="/countertops">Explore More</Link>
 								</Button>
 							</div>
-						</div>
+						</motion.div>
 					</div>
 				)}
 			</div>
