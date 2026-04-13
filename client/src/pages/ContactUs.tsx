@@ -1,9 +1,78 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { useRef, useState } from "react";
 import { Link } from "wouter";
+import { CONTACT_EMAIL } from "@shared/const";
+
+const BUSINESS_OWNER_EMAIL = CONTACT_EMAIL;
+const FALLBACK_PHONE = "(440) 561-0354";
 
 export default function ContactUs() {
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [configError, setConfigError] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = formRef.current;
+    if (!form) return;
+
+    setConfigError("");
+    setSubmitted(false);
+    setSubmitError("");
+
+    // Match requested workflow: prevent default then run browser validation manually.
+    if (!form.reportValidity()) {
+      return;
+    }
+
+    const ownerEmail = BUSINESS_OWNER_EMAIL.trim();
+    if (!ownerEmail || ownerEmail.includes("your-email") || ownerEmail.includes("example.com")) {
+      setConfigError("Form is not configured yet. Please set BUSINESS_OWNER_EMAIL.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const formData = new FormData(form);
+    const payload = {
+      name: String(formData.get("name") ?? "").trim(),
+      email: String(formData.get("email") ?? "").trim(),
+      phone: String(formData.get("phone") ?? "").trim(),
+      subject: String(formData.get("subject") ?? "").trim(),
+      message: String(formData.get("message") ?? "").trim(),
+      _subject: String(formData.get("_subject") ?? "Website Contact Form Submission"),
+      _template: String(formData.get("_template") ?? "table"),
+      _captcha: String(formData.get("_captcha") ?? "false"),
+    };
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(ownerEmail)}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to send your message right now.");
+      }
+
+      setSubmitted(true);
+      form.reset();
+    } catch (error) {
+      const fallbackMessage = `Sorry, we couldn't send your message. Please call ${FALLBACK_PHONE} for immediate help.`;
+      setSubmitError(error instanceof Error ? `${error.message} ${fallbackMessage}` : fallbackMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Hero Section */}
@@ -45,8 +114,8 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg mb-1 text-primary">Email</h3>
-                    <a href="mailto:info@cabinetvenue.com" className="text-accent hover:text-accent/80 font-semibold text-lg">
-                      info@cabinetvenue.com
+                    <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent hover:text-accent/80 font-semibold text-lg">
+                      {CONTACT_EMAIL}
                     </a>
                     <p className="text-muted-foreground text-sm mt-1">We'll respond within 24 hours</p>
                   </div>
@@ -108,14 +177,36 @@ export default function ContactUs() {
             </div>
 
             <Card className="p-8 border-0 shadow-md">
-              <form className="space-y-6">
+              {configError && (
+                <div className="mb-6 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                  {configError}
+                </div>
+              )}
+              {submitted && (
+                <div className="mb-6 rounded-lg bg-accent/10 px-4 py-3 text-sm text-primary">
+                  Your message has been sent to {CONTACT_EMAIL}.
+                </div>
+              )}
+              {submitError && (
+                <div className="mb-6 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                  {submitError}
+                </div>
+              )}
+
+              {!submitted && (
+              <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-6">
+                <input type="hidden" name="_subject" value="Website Contact Form Submission" />
+                <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_captcha" value="false" />
                 {/* Name */}
                 <div>
                   <label className="block text-sm font-medium mb-2 text-primary">Full Name *</label>
                   <input
                     type="text"
+                    name="name"
                     className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
                     placeholder="Your name"
+                    required
                   />
                 </div>
 
@@ -124,8 +215,10 @@ export default function ContactUs() {
                   <label className="block text-sm font-medium mb-2 text-primary">Email Address *</label>
                   <input
                     type="email"
+                    name="email"
                     className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
                     placeholder="your@email.com"
+                    required
                   />
                 </div>
 
@@ -134,6 +227,7 @@ export default function ContactUs() {
                   <label className="block text-sm font-medium mb-2 text-primary">Phone Number</label>
                   <input
                     type="tel"
+                    name="phone"
                     className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
                     placeholder="(440) 000-0000"
                   />
@@ -144,8 +238,10 @@ export default function ContactUs() {
                   <label className="block text-sm font-medium mb-2 text-primary">Subject *</label>
                   <input
                     type="text"
+                    name="subject"
                     className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
                     placeholder="What is this about?"
+                    required
                   />
                 </div>
 
@@ -153,17 +249,20 @@ export default function ContactUs() {
                 <div>
                   <label className="block text-sm font-medium mb-2 text-primary">Message *</label>
                   <textarea
+                    name="message"
                     rows={6}
                     className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
                     placeholder="Tell us your message..."
+                    required
                   ></textarea>
                 </div>
 
                 {/* Submit */}
-                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground py-3 font-semibold text-lg">
-                  Send Message
+                <Button type="submit" disabled={isSubmitting} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground py-3 font-semibold text-lg disabled:opacity-70">
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </Button>
               </form>
+              )}
             </Card>
           </div>
         </div>

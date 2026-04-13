@@ -26,10 +26,13 @@ export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileCabinetMenuOpen, setMobileCabinetMenuOpen] = useState(false);
   const [location] = useLocation();
-  const [isInHero, setIsInHero] = useState(false);
+  const [isInHero, setIsInHero] = useState(location === "/");
   const headerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    let rafId: number | null = null;
+    let timeoutId: number | null = null;
+
     const updateHeaderMode = () => {
       if (location !== "/") {
         setIsInHero(false);
@@ -49,10 +52,19 @@ export default function Layout({ children }: LayoutProps) {
     };
 
     updateHeaderMode();
+    // Re-check once children are painted so the hero element is present on initial load.
+    rafId = window.requestAnimationFrame(updateHeaderMode);
+    timeoutId = window.setTimeout(updateHeaderMode, 80);
     window.addEventListener("scroll", updateHeaderMode, { passive: true });
     window.addEventListener("resize", updateHeaderMode);
 
     return () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
       window.removeEventListener("scroll", updateHeaderMode);
       window.removeEventListener("resize", updateHeaderMode);
     };
@@ -79,10 +91,10 @@ export default function Layout({ children }: LayoutProps) {
       {/* Header */}
       <header
         ref={headerRef}
-        className={`top-0 z-50 border-b transition-all duration-300 ${
+        className={`top-0 z-50 transition-all duration-300 ${
           location === "/"
-            ? `fixed inset-x-0 ${isInHero ? "bg-transparent border-transparent shadow-none" : "bg-white/95 backdrop-blur border-border shadow-sm"}`
-            : "sticky bg-white border-border shadow-sm"
+            ? `fixed inset-x-0 ${isInHero ? "bg-transparent border-0 shadow-none" : "bg-white/95 backdrop-blur border-b border-border shadow-sm"}`
+            : "sticky bg-white border-b border-border shadow-sm"
         }`}
       >
         <div className="container">

@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button";
-import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionValueEvent, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { type ReactNode, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
 import White from "@/components/White";
 import CountertopScroll from "@/components/CountertopScroll";
 
 interface CharacterRevealTextProps {
   text: string;
-  progress: ReturnType<typeof useTransform>;
+  progress: MotionValue<number>;
 }
 
 function renderHighlightedText(input: string) {
   const specialWords = ["specializing", "quality cabinets."];
-  const nodes: Array<string | JSX.Element> = [];
+  const nodes: ReactNode[] = [];
   let cursor = 0;
 
   while (cursor < input.length) {
@@ -134,7 +134,7 @@ export default function Home() {
 
       {/* Design Story Section */}
       <section className="bg-background py-0">
-        <div className="w-full overflow-hidden border-y border-border/60 bg-white shadow-sm">
+        <div className="w-full overflow-hidden border-t border-border/60 bg-white shadow-sm">
           <div className="grid grid-cols-2 gap-0 md:h-[86svh] md:grid-cols-12 md:grid-rows-[2fr_1fr]">
             <div className="relative col-span-2 h-[320px] overflow-hidden md:col-span-6 md:row-span-2 md:h-auto md:min-h-full">
               <img src={activeSection2Image} alt={`Kitchen design spotlight ${section2Index + 1}`} className="absolute inset-0 h-full w-full object-cover" />

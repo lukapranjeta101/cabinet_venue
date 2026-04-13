@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
 import { Link } from "wouter";
+import { CONTACT_EMAIL } from "@shared/const";
 
 export default function Quote() {
   const [formData, setFormData] = useState({
@@ -16,18 +17,38 @@ export default function Quote() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real application, this would send the form data to a backend
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
+    setIsSubmitting(true);
+    setSubmitError("");
+    setSubmitted(false);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          kind: "quote",
+          ...formData,
+        }),
+      });
+
+      if (!response.ok) {
+        const result = (await response.json().catch(() => null)) as { message?: string } | null;
+        throw new Error(result?.message || "Unable to send your quote request right now.");
+      }
+
+      setSubmitted(true);
       setFormData({
         name: "",
         email: "",
@@ -38,7 +59,11 @@ export default function Quote() {
         timeline: "flexible",
         message: "",
       });
-    }, 3000);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Unable to send your quote request right now.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -67,7 +92,7 @@ export default function Quote() {
                     </div>
                     <h3 className="text-2xl font-bold mb-2 text-primary">Thank You!</h3>
                     <p className="text-muted-foreground mb-4">
-                      We've received your quote request. We'll contact you within 24 hours.
+                      Your quote request has been sent to {CONTACT_EMAIL}.
                     </p>
                     <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
                       <Link href="/">Back to Home</Link>
@@ -75,6 +100,11 @@ export default function Quote() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
+                    {submitError && (
+                      <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                        {submitError}
+                      </div>
+                    )}
                     {/* Name */}
                     <div>
                       <label className="block text-sm font-medium mb-2 text-primary">Full Name *</label>
@@ -199,8 +229,8 @@ export default function Quote() {
                     </div>
 
                     {/* Submit */}
-                    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground py-3 font-semibold text-lg">
-                      Request Quote
+                    <Button type="submit" disabled={isSubmitting} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground py-3 font-semibold text-lg disabled:opacity-70">
+                      {isSubmitting ? "Sending..." : "Request Quote"}
                     </Button>
                   </form>
                 )}
@@ -242,8 +272,8 @@ export default function Quote() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Email</p>
-                    <a href="mailto:info@cabinetvenue.com" className="text-accent font-semibold hover:text-accent/80">
-                      info@cabinetvenue.com
+                    <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent font-semibold hover:text-accent/80">
+                      {CONTACT_EMAIL}
                     </a>
                   </div>
                   <div>

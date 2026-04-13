@@ -59,7 +59,19 @@ function drawCoverFrame(
   const x = (width - drawWidth) / 2;
   const y = (height - drawHeight) / 2;
 
-  ctx.drawImage(image, x, y, drawWidth, drawHeight);
+  // Trim a tiny top edge from source frames to avoid a persistent top-line artifact.
+  const sourceInsetY = Math.max(1, Math.round(image.naturalHeight * 0.004));
+  ctx.drawImage(
+    image,
+    0,
+    sourceInsetY,
+    image.naturalWidth,
+    image.naturalHeight - sourceInsetY,
+    x,
+    y,
+    drawWidth,
+    drawHeight
+  );
 }
 
 export default function White() {
@@ -192,8 +204,8 @@ export default function White() {
   }, []);
 
   return (
-    <section ref={sectionRef} data-hero-scroll="true" className="relative h-[400vh] bg-[#f6f4f1]">
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#f6f4f1]">
+    <section ref={sectionRef} data-hero-scroll="true" className="relative h-[400dvh] bg-[#f6f4f1]">
+      <div className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-[#f6f4f1]">
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
         {!isReady && (

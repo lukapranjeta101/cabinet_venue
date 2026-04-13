@@ -80,8 +80,19 @@ export default function CountertopScroll({
 			const drawHeight = frame.naturalHeight * scale;
 			const x = (width - drawWidth) / 2;
 			const y = (height - drawHeight) / 2;
-
-			ctx.drawImage(frame, x, y, drawWidth, drawHeight);
+			// Remove a tiny left-edge artifact line that appears in the source sequence.
+			const sourceInsetX = Math.max(1, Math.round(frame.naturalWidth * 0.0025));
+			ctx.drawImage(
+				frame,
+				sourceInsetX,
+				0,
+				frame.naturalWidth - sourceInsetX,
+				frame.naturalHeight,
+				x,
+				y,
+				drawWidth,
+				drawHeight
+			);
 
 			const bottomGradient = ctx.createLinearGradient(0, 0, 0, height);
 			bottomGradient.addColorStop(0, "rgba(255, 255, 255, 0)");
@@ -206,7 +217,6 @@ export default function CountertopScroll({
 						<div className="relative z-10 flex w-[50%] flex-col items-start justify-center px-16 text-left lg:px-20">
 							<div className="max-w-md">
 								<div className="mb-4 flex items-center gap-3 text-sm tracking-[0.18em] text-primary/80 uppercase">
-									<span className="h-px w-6 bg-primary/40" />
 									<span>Countertops</span>
 								</div>
 								<h2 className="text-4xl font-bold leading-[1.1] tracking-tight text-[#111111] md:text-6xl">{title}</h2>
@@ -217,12 +227,13 @@ export default function CountertopScroll({
 							</div>
 						</div>
 
-						<div className="absolute inset-y-0 right-0 w-[50%]">
-							{!isReady && (
-								<div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
-									<div className="flex flex-col items-center gap-4">
-										<div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
-										<p className="text-sm text-slate-600">Loading...</p>
+							<div className="absolute inset-y-0 right-0 w-[50%]">
+								<div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-3 bg-white" />
+								{!isReady && (
+									<div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
+										<div className="flex flex-col items-center gap-4">
+											<div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
+											<p className="text-sm text-slate-600">Loading...</p>
 									</div>
 								</div>
 							)}
@@ -240,15 +251,15 @@ export default function CountertopScroll({
 						<div className="flex w-full max-w-md flex-col items-center justify-center gap-5 text-center">
 							<div className="max-w-sm">
 								<div className="mb-4 flex items-center justify-center gap-3 text-sm tracking-[0.18em] text-primary/80 uppercase">
-									<span className="h-px w-6 bg-primary/40" />
 									<span>Countertops</span>
 								</div>
 								<h2 className="text-4xl font-bold leading-[1.1] tracking-tight text-[#111111]">{title}</h2>
 							</div>
 
-							<div className="relative h-[34vh] max-h-[320px] w-full">
-								{!isReady && (
-									<div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
+								<div className="relative h-[34vh] max-h-[320px] w-full">
+									<div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-2 bg-white" />
+									{!isReady && (
+										<div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
 										<div className="flex flex-col items-center gap-4">
 											<div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
 											<p className="text-sm text-slate-600">Loading...</p>
