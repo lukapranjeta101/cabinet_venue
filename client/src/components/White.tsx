@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
+import { useLazyImageSequence } from "@/hooks/useLazyImageSequence";
 
 const RAW_FRAMES = import.meta.glob("/mycomponents1/ezgif-frame-*.jpg", {
   eager: true,
@@ -77,12 +78,19 @@ function drawCoverFrame(
 export default function White() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const loadedFramesRef = useRef<HTMLImageElement[]>([]);
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
   const lastDrawnFrameFloatRef = useRef(-1);
   const rafRef = useRef<number | null>(null);
   const [isReady, setIsReady] = useState(false);
+
+  const { isFirstFrameReady, totalFrames, getNearestLoadedFrame } = useLazyImageSequence({
+    frameUrls: FRAME_URLS,
+    triggerRef: sectionRef,
+    rootMargin: "300px 0px",
+    threshold: 0.12,
+    preloadConcurrency: 3,
+  });
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -107,59 +115,29 @@ export default function White() {
       const canvas = canvasRef.current;
       if (!canvas) return;
       const ctx = canvas.getContext("2d");
-      const frames = loadedFramesRef.current;
-      if (!ctx || frames.length === 0) return;
+      if (!ctx || totalFrames === 0) return;
 
       const clamped = Math.min(1, Math.max(0, progress));
-      const frameIndex = Math.round(clamped * (frames.length - 1));
+      const frameIndex = Math.round(clamped * (totalFrames - 1));
       if (frameIndex === lastDrawnFrameFloatRef.current) return;
 
-      const frame = frames[frameIndex];
+      const frame = getNearestLoadedFrame(frameIndex);
       if (!frame) return;
 
       drawCoverFrame(ctx, canvas, frame, BG_COLOR);
       lastDrawnFrameFloatRef.current = frameIndex;
     },
-    []
+    [getNearestLoadedFrame, totalFrames]
   );
 
   useEffect(() => {
-    let cancelled = false;
-
-    const preload = async () => {
-      const images = await Promise.all(
-        FRAME_URLS.map(
-          (src) =>
-            new Promise<HTMLImageElement | null>((resolve) => {
-              const img = new Image();
-              img.decoding = "async";
-              img.onload = () => resolve(img);
-              img.onerror = () => resolve(null);
-              img.src = src;
-            })
-        )
-      );
-
-      if (cancelled) return;
-
-      const loaded = images.filter((img): img is HTMLImageElement => Boolean(img));
-      loadedFramesRef.current = loaded;
-      setIsReady(loaded.length > 0);
-
-      if (loaded.length > 0) {
-        drawFrame(0);
-      }
-    };
-
-    preload();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [drawFrame]);
+    if (!isFirstFrameReady) return;
+    setIsReady(true);
+    drawFrame(currentProgressRef.current);
+  }, [drawFrame, isFirstFrameReady]);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (!isReady || loadedFramesRef.current.length === 0) return;
+    if (!isReady || totalFrames === 0) return;
 
     targetProgressRef.current = latest;
     if (rafRef.current !== null) return;
@@ -186,14 +164,14 @@ export default function White() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (!isReady || loadedFramesRef.current.length === 0) return;
+      if (!isReady || totalFrames === 0) return;
       lastDrawnFrameFloatRef.current = -1;
       drawFrame(currentProgressRef.current);
     };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [drawFrame, isReady]);
+  }, [drawFrame, isReady, totalFrames]);
 
   useEffect(() => {
     return () => {
