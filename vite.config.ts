@@ -151,6 +151,7 @@ function vitePluginManusDebugCollector(): Plugin {
 }
 
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+const DEV_HOST = process.env.VITE_DEV_HOST || "127.0.0.1";
 
 export default defineConfig({
   plugins,
@@ -170,7 +171,7 @@ export default defineConfig({
   server: {
     port: 3000,
     strictPort: false, // Will find next available port if 3000 is busy
-    host: true,
+    host: DEV_HOST,
     allowedHosts: [
       ".manuspre.computer",
       ".manus.computer",

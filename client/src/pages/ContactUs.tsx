@@ -31,7 +31,7 @@ export default function ContactUs() {
 
     const ownerEmail = BUSINESS_OWNER_EMAIL.trim();
     if (!ownerEmail || ownerEmail.includes("your-email") || ownerEmail.includes("example.com")) {
-      setConfigError("Form is not configured yet. Please set BUSINESS_OWNER_EMAIL.");
+      setConfigError("Form is not configured yet. Please set CONTACT_EMAIL in shared/const.ts.");
       return;
     }
 

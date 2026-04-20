@@ -4,6 +4,9 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { CONTACT_EMAIL } from "@shared/const";
 
+const BUSINESS_OWNER_EMAIL = CONTACT_EMAIL;
+const FALLBACK_PHONE = "(440) 561-0354";
+
 export default function Quote() {
   const [formData, setFormData] = useState({
     name: "",
@@ -19,6 +22,7 @@ export default function Quote() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [configError, setConfigError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -28,24 +32,34 @@ export default function Quote() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setConfigError("");
     setSubmitError("");
     setSubmitted(false);
 
+    const ownerEmail = BUSINESS_OWNER_EMAIL.trim();
+    if (!ownerEmail || ownerEmail.includes("your-email") || ownerEmail.includes("example.com")) {
+      setConfigError("Form is not configured yet. Please set CONTACT_EMAIL in shared/const.ts.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(ownerEmail)}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({
-          kind: "quote",
           ...formData,
+          _subject: "Website Quote Request Submission",
+          _template: "table",
+          _captcha: "false",
         }),
       });
 
       if (!response.ok) {
-        const result = (await response.json().catch(() => null)) as { message?: string } | null;
-        throw new Error(result?.message || "Unable to send your quote request right now.");
+        throw new Error("Unable to send your quote request right now.");
       }
 
       setSubmitted(true);
@@ -60,7 +74,8 @@ export default function Quote() {
         message: "",
       });
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : "Unable to send your quote request right now.");
+      const fallbackMessage = `Sorry, we couldn't send your quote request. Please call ${FALLBACK_PHONE} for immediate help.`;
+      setSubmitError(error instanceof Error ? `${error.message} ${fallbackMessage}` : fallbackMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -100,6 +115,11 @@ export default function Quote() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
+                    {configError && (
+                      <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                        {configError}
+                      </div>
+                    )}
                     {submitError && (
                       <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
                         {submitError}
